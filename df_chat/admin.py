@@ -46,10 +46,12 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     fk_name = 'user'
     can_delete = False
+    extra = 1 
     classes = ('text-capitalize','collapse open')
-    extra = 1   
+    list_display = ("avatar_tag",)
     fieldsets =  (
-        (None, {'fields': ('avatar','bio', 'display')}),)
+        (None, {'fields': ('avatar','bio', 'display','avatar_tag')}),)
+    readonly_fields = ('avatar_tag',)
 
 
 
