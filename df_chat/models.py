@@ -17,6 +17,7 @@ from django.utils.html import escape
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from uuid import uuid4
 
 User = get_user_model()
 
@@ -212,6 +213,14 @@ class UserProfile(models.Model):
     
     
     def get_upload_avatar_to(self, filename):
+        ext = filename.split('.')[-1]
+        # get filename
+        if self.user.id :
+            filename = '{}.{}'.format(self.user.id, ext)
+        else:
+            # set filename as random string
+            filename = '{}.{}'.format(uuid4().hex, ext)
+
         return f"images/avatar/{self.user.id}/{filename}"
     avatar = models.ImageField(upload_to=get_upload_avatar_to, null=True, blank=True)
 
@@ -222,10 +231,11 @@ class UserProfile(models.Model):
             return ""
     avatar_tag.short_description = 'Image'
     avatar_tag.allow_tags = True
-    full_name = ''
+    def get_full_name(self):
+        return self.user.first_name + " " +  self.user.last_name
    
     bio    = models.TextField(default="", blank=True)
-    display    = models.CharField(default=full_name,max_length=512,blank=True)
+    display    = models.CharField(default='',max_length=512,blank=True)
 
     class Meta:
         verbose_name = u'User Profile '
