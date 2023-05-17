@@ -113,3 +113,8 @@ DF_NOTIFICATIONS = {
 DF_AUTH = {
     "USER_IDENTITY_FIELDS": ("username",),
 }
+
+
+AUTH_PROFILE_MODULE = 'df_chat.UserProfile'
+
+

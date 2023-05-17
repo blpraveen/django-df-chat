@@ -13,9 +13,13 @@ from django.dispatch import receiver
 from itertools import repeat
 from model_utils.models import TimeStampedModel
 from typing import List
-
+from django.utils.html import escape
+from django.utils.functional import cached_property
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 User = get_user_model()
+
 
 
 class RoomQuerySet(models.QuerySet):
@@ -200,3 +204,28 @@ class MessageNotificationRule(NotificationModelAsyncRule):
 def notify_delete_reaction(sender, instance, *args, **kwargs):
     if instance.parent:
         instance.parent.save()
+
+
+class UserProfile(models.Model):
+    
+    user   = models.OneToOneField(User,on_delete=models.CASCADE)
+    
+    
+    def get_upload_avatar_to(self, filename):
+        return f"images/avatar/{self.user.id}/{filename}"
+    avatar = models.ImageField(upload_to=get_upload_avatar_to, null=True, blank=True)
+
+    def avatar_tag(self):
+        if self.avatar.url is not None:
+            return mark_safe('<img src="{}" height="50"/>'.format(self.avatar.url))
+        else:
+            return ""
+    avatar_tag.short_description = 'Image'
+    avatar_tag.allow_tags = True
+    full_name = ''
+   
+    bio    = models.TextField(default="", blank=True)
+    display    = models.CharField(default=full_name,max_length=512,blank=True)
+
+    
+
