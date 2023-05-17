@@ -48,22 +48,12 @@ class UserProfileInline(admin.StackedInline):
     verbose_name_plural = 'Profiles'
     classes = ('text-capitalize','collapse open')
     extra = 1
-    max_num = 0
-    #fields = [ 'display_avatar','bio','display','avatar']
     list_display = ('avatar_tag')
     fieldsets =  (
         ("Profile", {'fields': ('avatar','bio', 'display',)}),)
-    readonly_fields = ['id','avatar_tag']
-    # def display_avatar(self, obj):
-    #     return mark_safe('<img src="{url}" width="{width}" height="{height}" />'.format(
-    #         url=obj.avatar.url, # once again, this is the name of the actual image field in your model
-    #         width=obj.avatar.width, # or define custom width
-    #         height=obj.avatar.height, # same as above
-    #         ))
-    
+
 
 class UserProfileAdmin(UserAdmin):
-    
     inlines = (UserProfileInline,)
 
     
