@@ -8,7 +8,7 @@ from .forms import ProfileUserChangeForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 User = get_user_model()
 
@@ -56,7 +56,16 @@ class UserProfileInline(admin.StackedInline):
 
 
 class UserProfileAdmin(UserAdmin):
+    
     inlines = (UserProfileInline,)
+    list_display =  ("avatar_tag",) + UserAdmin.list_display  # pass other fileds if you want eg. name
+
+    def avatar_tag(self, obj):
+        if obj.userprofile.avatar:
+            return format_html(
+                '<img src="%s" width="60px" height="60px"/>' % obj.userprofile.avatar.url
+            )
+        return ""
     
     
 
