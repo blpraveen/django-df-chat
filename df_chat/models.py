@@ -227,5 +227,8 @@ class UserProfile(models.Model):
     bio    = models.TextField(default="", blank=True)
     display    = models.CharField(default=full_name,max_length=512,blank=True)
 
-    
+    class Meta:
+        verbose_name = u'User Profile '
+        verbose_name_plural = u'Profiles'
+
 

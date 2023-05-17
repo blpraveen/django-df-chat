@@ -3,6 +3,8 @@ from .models import MessageImage
 from .models import Room
 from .models import RoomUser
 from .models import UserProfile
+from .forms import ProfileUserCreationForm
+from .forms import ProfileUserChangeForm
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
@@ -44,20 +46,17 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     fk_name = 'user'
     can_delete = False
-    verbose_name = "User profile"
-    verbose_name_plural = 'Profiles'
     classes = ('text-capitalize','collapse open')
-    extra = 1
-    list_display = ('avatar_tag')
+    extra = 1   
     fieldsets =  (
-        ("Profile", {'fields': ('avatar','bio', 'display',)}),)
+        (None, {'fields': ('avatar','bio', 'display')}),)
+
 
 
 class UserProfileAdmin(UserAdmin):
     inlines = (UserProfileInline,)
-
     
-
+    
 
 
 admin.site.unregister(User)
